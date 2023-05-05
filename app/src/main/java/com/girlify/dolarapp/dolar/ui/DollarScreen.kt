@@ -80,9 +80,10 @@ fun Body(modifier: Modifier) {
             TextField(
                 value = pesosFormatter(amount),
                 onValueChange = {
-                    amount = it
+                    val itWithoutComa = it.replace(",","").trim()
+                    amount = itWithoutComa
                 },
-                maxLines = 1,
+                singleLine = true,
                 leadingIcon = { Text(text = "ARG") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
@@ -101,7 +102,8 @@ fun Body(modifier: Modifier) {
 fun pesosFormatter(total: String): String {
     val format: NumberFormat = NumberFormat.getInstance()
     format.minimumFractionDigits = 2
-    //format.maximumFractionDigits = 2
+    format.maximumFractionDigits = 2
+    format.maximumIntegerDigits = 8
     total.trim()
     return if (total == ""){
         ""
@@ -131,7 +133,7 @@ fun DollarItem(dollar: DollarModel, amount: Float) {
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text(text = dollar.name, fontSize = 20.sp, color = Color(0xFF1B5E20))
+        Text(text = dollar.name, fontSize = 20.sp, color = Color(0xFF004D40))
         Text(
             text = (if (amount != 0f) {
                 dollarFormatter(amount/dollar.sell)
@@ -140,7 +142,7 @@ fun DollarItem(dollar: DollarModel, amount: Float) {
             }),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            color = Color(0xFF1B5E20)
+            color = Color(0xFF004D40)
         )
     }
 }
