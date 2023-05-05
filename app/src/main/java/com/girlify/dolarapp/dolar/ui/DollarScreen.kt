@@ -1,6 +1,5 @@
 package com.girlify.dolarapp.dolar.ui
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,7 +30,6 @@ import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Currency
 import java.util.Date
-import java.util.Formatter
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
