@@ -1,3 +1,11 @@
 package com.girlify.dolarapp.dolar.ui.model
 
-class DollarModel (var name: String, var buy: Int, var sell: Int)
+class DollarModel (
+    val name: String,
+    val buy: String,
+    val sell: String,
+    val date: String,
+    val variation: String,
+    val class_variation: String,
+    val prev_price: String
+)
