@@ -6,11 +6,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -34,15 +38,39 @@ import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview(showBackground = true)
-fun DollarScreen() {
+fun DollarScreen(dollarViewModel: DollarViewModel) {
     Scaffold(
         topBar = {
             TopBar()
+        },
+        bottomBar = {
+            Footer()
         }
-    ) {
-        Body(Modifier.padding(it))
+    ) {padding ->
+        val uiState by produceState<UiState>(initialValue = UiState.Loading) {
+            dollarViewModel.uiState.collect { value = it }
+        }
+
+        when(uiState){
+            UiState.Error -> TODO()
+            UiState.Loading -> CircularProgressIndicator()
+            is UiState.Success -> Body(
+                Modifier.padding(padding),
+                (uiState as UiState.Success).dollars
+            )
+        }
     }
+}
+
+@Composable
+@Preview(showBackground = true)
+fun Footer() {
+    Text(
+        text = "Fuente: Ámbito Financiero",
+        Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,7 +90,7 @@ fun TopBar() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Body(modifier: Modifier) {
+fun Body(modifier: Modifier, dollars: List<DollarModel>) {
     Column(
         modifier
             .fillMaxSize()
@@ -70,7 +98,8 @@ fun Body(modifier: Modifier) {
     ) {
         Card(
             Modifier
-                .padding(16.dp)
+                .padding(16.dp),
+            elevation = CardDefaults.cardElevation(8.dp)
         ) {
             var amount by rememberSaveable {
                 mutableStateOf("")
@@ -82,7 +111,8 @@ fun Body(modifier: Modifier) {
                     amount = itWithoutComa
                 },
                 singleLine = true,
-                leadingIcon = { Text(text = "ARG") },
+                label = { Text(text = "Ingresa el monto a calcular")},
+                trailingIcon = { Text(text = "ARG") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier.fillMaxWidth()
             )
@@ -91,7 +121,7 @@ fun Body(modifier: Modifier) {
                     0f
                 } else {
                     amount.toFloat()
-                })
+                }), dollars
             )
         }
     }
@@ -99,7 +129,6 @@ fun Body(modifier: Modifier) {
 
 fun pesosFormatter(total: String): String {
     val format: NumberFormat = NumberFormat.getInstance()
-    format.minimumFractionDigits = 2
     format.maximumFractionDigits = 2
     format.maximumIntegerDigits = 8
     total.trim()
@@ -112,14 +141,14 @@ fun pesosFormatter(total: String): String {
 }
 
 @Composable
-fun DollarList(amount: Float) {
+fun DollarList(amount: Float, dollars: List<DollarModel>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(getDollar()) {
+        items(dollars) {
             DollarItem(it, amount)
         }
     }
@@ -134,9 +163,9 @@ fun DollarItem(dollar: DollarModel, amount: Float) {
         Text(text = dollar.name, fontSize = 20.sp, color = Color(0xFF004D40))
         Text(
             text = (if (amount != 0f) {
-                dollarFormatter(amount/dollar.sell)
+                dollarFormatter(amount / dollar.sell.replace(",", ".").toFloat())
             } else {
-                dollarFormatter(dollar.sell.toFloat())
+                dollarFormatter(dollar.sell.replace(",", ".").toFloat())
             }),
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
@@ -151,10 +180,3 @@ fun dollarFormatter(total: Float): String {
     format.currency = Currency.getInstance(Locale("en", "US"))
     return format.format(total)
 }
-
-fun getDollar(): List<DollarModel> = listOf(
-    DollarModel("Blue", 450, 453),
-    DollarModel("Oficial", 450, 453),
-    DollarModel("Mep", 450, 453),
-    DollarModel("CCL", 450, 453)
-)
