@@ -11,7 +11,9 @@ import androidx.compose.ui.Modifier
 import com.girlify.dolarapp.dolar.ui.DollarScreen
 import com.girlify.dolarapp.dolar.ui.DollarViewModel
 import com.girlify.dolarapp.ui.theme.DolarAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val dollarViewModel: DollarViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
