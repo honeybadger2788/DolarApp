@@ -2,10 +2,12 @@ package com.girlify.dolarapp.dolar.data
 
 import com.girlify.dolarapp.dolar.data.network.DollarService
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
+import javax.inject.Inject
 
-class DollarRepository {
-    private val api = DollarService()
-
+class DollarRepository @Inject constructor(
+    private val api: DollarService
+) {
+    
     suspend fun getDollarBlue(): DollarModel? {
         val response = api.getDollarBlue()
         return response?.toDomain("Blue")
