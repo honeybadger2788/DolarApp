@@ -1,9 +1,13 @@
 package com.girlify.dolarapp.dolar.ui
 
+import androidx.compose.runtime.MutableState
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.girlify.dolarapp.dolar.data.DollarRepository
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
+import com.girlify.dolarapp.dolar.ui.model.DollarOperations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -20,6 +24,9 @@ class DollarViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
     val uiState: StateFlow<UiState> = _uiState
+
+    private val _operationSelected = MutableLiveData<DollarOperations>()
+    val operationSelected: LiveData<DollarOperations> = _operationSelected
 
     init {
         getDollars()
@@ -42,5 +49,9 @@ class DollarViewModel @Inject constructor(
                 _uiState.value = UiState.Success(it as List<DollarModel>)
             }
         }
+    }
+
+    fun onSelected(operation: DollarOperations) {
+        _operationSelected.value = operation
     }
 }
