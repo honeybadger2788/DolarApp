@@ -34,11 +34,13 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.girlify.dolarapp.core.VariationNotificacion
 import com.girlify.dolarapp.dolar.ui.UiState.*
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
 import com.girlify.dolarapp.dolar.ui.model.DollarOperations
@@ -114,7 +116,6 @@ fun Body(modifier: Modifier, dollars: List<DollarModel>, dollarViewModel: Dollar
             .fillMaxSize()
             .background(Color(0xFF009688)), verticalArrangement = Arrangement.Center
     ) {
-
         OperationSelect(operationSelected) { dollarViewModel.onSelected(it) }
         DollarCard(dollars, operationSelected)
     }
@@ -236,6 +237,22 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
         Compra -> formatPesoAmount(amount, dollar.buy)
         Venta -> formatDollarAmount(amount, dollar.sell)
     }
+
+    val context = LocalContext.current
+    var lastVariation by rememberSaveable { mutableStateOf(dollar.variation) }
+    val currentVariation = formatVariation(dollar.variation)
+
+    // La aplicación enviará una notificación cada vez que el tipo de cambio sufra una variacion
+    // de +/- 5%, por única vez mientras dicho porcentaje se mantenga
+    if (currentVariation != formatVariation(lastVariation) &&
+        (currentVariation >= 5f || currentVariation <= -5f)) {
+        val msg =
+            if (currentVariation >= 5f) "Subió un ${dollar.variation}" else "Bajó un ${dollar.variation}"
+        val createNotification = VariationNotificacion(context, dollar.name, msg)
+        createNotification.showNotification()
+        lastVariation = dollar.variation
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -260,6 +277,10 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
             fontWeight = FontWeight.Bold
         )
     }
+}
+
+fun formatVariation(variation: String): Float {
+    return variation.replace(",", ".").replace("%", "").toFloat()
 }
 
 @Composable

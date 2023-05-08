@@ -17,7 +17,7 @@ class DollarRepository @Inject constructor(
     fun getDollars(): Flow<List<DollarModel>> = flow {
         emit(getDollarList())
         while (true) {
-            delay(5000) // Actualiza cada 5 segundos
+            delay(60000) // Actualiza cada 1 minuto
             emit(getDollarList())
         }
     }
