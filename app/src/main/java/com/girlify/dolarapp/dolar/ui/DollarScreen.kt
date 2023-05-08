@@ -46,28 +46,26 @@ import com.girlify.dolarapp.dolar.ui.model.getOperations
 import com.girlify.dolarapp.dolar.ui.model.operationToString
 import com.girlify.dolarapp.ui.composables.ErrorComponent
 import com.girlify.dolarapp.ui.composables.LoadingComponent
-import java.text.DateFormat.SHORT
-import java.text.DateFormat.getDateTimeInstance
 import java.text.NumberFormat
 import java.util.Currency
-import java.util.Date
 import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DollarScreen(dollarViewModel: DollarViewModel) {
+    val uiState by produceState<UiState>(initialValue = Loading) {
+        dollarViewModel.uiState.collect { value = it }
+    }
+
+    val dateTimeUpdated: String by dollarViewModel.dateTimeUpdated.observeAsState("")
     Scaffold(
         topBar = {
-            TopBar()
+            TopBar(dateTimeUpdated)
         },
         bottomBar = {
             Footer()
         }
     ) {padding ->
-        val uiState by produceState<UiState>(initialValue = Loading) {
-            dollarViewModel.uiState.collect { value = it }
-        }
-
         when(uiState){
             Error -> ErrorComponent(msg = "No se pudieron actualizar los valores")
             Loading -> LoadingComponent()
@@ -92,13 +90,11 @@ fun Footer() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
-    val sdf = getDateTimeInstance(SHORT,SHORT, Locale("es","ARG"))
-    val currentDate = sdf.format(Date())
+fun TopBar(dateTimeUpdated: String) {
     TopAppBar(
         title = {
             Text(
-                text = "Última actualización: $currentDate",
+                text = "Última actualización: $dateTimeUpdated",
                 modifier = Modifier.fillMaxWidth()
             )
         },
