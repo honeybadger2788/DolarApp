@@ -8,8 +8,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.girlify.dolarapp.core.model.Routes
 import com.girlify.dolarapp.dolar.ui.DollarScreen
 import com.girlify.dolarapp.dolar.ui.DollarViewModel
+import com.girlify.dolarapp.ui.composables.SplashScreen
 import com.girlify.dolarapp.ui.theme.DolarAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +32,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    DollarScreen(dollarViewModel)
+                    val navigationController = rememberNavController()
+                    NavHost(
+                        navController = navigationController,
+                        startDestination = Routes.SplashScreen.route
+                    ) {
+                        composable(Routes.SplashScreen.route) {
+                            SplashScreen(navigationController)
+                        }
+                        composable(Routes.Dollar.route) {
+                            DollarScreen(dollarViewModel)
+                        }
+                    }
                 }
             }
         }

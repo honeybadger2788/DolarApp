@@ -24,10 +24,12 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -101,7 +103,7 @@ fun TopBar(dateTimeUpdated: String) {
                 modifier = Modifier.fillMaxWidth(),
                 fontSize = 20.sp
             )
-        },
+        }
     )
 }
 
@@ -114,7 +116,7 @@ fun Body(modifier: Modifier, dollars: List<DollarModel>, dollarViewModel: Dollar
     Column(
         modifier
             .fillMaxSize()
-            .background(Color(0xFF009688)), verticalArrangement = Arrangement.Center
+            .background(MaterialTheme.colorScheme.primary), verticalArrangement = Arrangement.Center
     ) {
         OperationSelect(operationSelected) { dollarViewModel.onSelected(it) }
         DollarCard(dollars, operationSelected)
@@ -182,7 +184,10 @@ fun OperationSelect(operationSelected: DollarOperations, onSelected: (DollarOper
                     imageVector = Icons.Default.KeyboardArrowDown,
                     contentDescription = "down"
                 )
-            }
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                disabledIndicatorColor = Color.Transparent
+            )
         )
         DropdownMenu(
             expanded = expanded,
@@ -260,7 +265,7 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
         Row {
             Text(
                 text = dollar.name,
-                color = Color(0xFF004D40),
+                color = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.size(4.dp))
@@ -268,12 +273,12 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
             Spacer(modifier = Modifier.size(4.dp))
             Text(
                 text = dollar.variation,
-                color = Color(0xFF004D40)
+                color = MaterialTheme.colorScheme.tertiary
             )
         }
         Text(
             text = amountText,
-            color = Color(0xFF004D40),
+            color = MaterialTheme.colorScheme.tertiary,
             fontWeight = FontWeight.Bold
         )
     }
