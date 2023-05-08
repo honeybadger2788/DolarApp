@@ -1,10 +1,6 @@
 package com.girlify.dolarapp.dolar.data.network
 
 import com.girlify.dolarapp.dolar.data.model.DollarResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DollarService @Inject constructor(

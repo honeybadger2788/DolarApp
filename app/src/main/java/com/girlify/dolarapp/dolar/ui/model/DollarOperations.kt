@@ -11,7 +11,7 @@ fun getOperations(): List<DollarOperations> = listOf(Compra, Venta)
 
 fun operationToString(operation: DollarOperations): String {
     return when(operation) {
-        Compra -> "Compra"
-        Venta -> "Venta"
+        Compra -> "Comprador"
+        Venta -> "Vendedor"
     }
 }
