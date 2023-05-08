@@ -38,6 +38,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.girlify.dolarapp.dolar.ui.UiState.*
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
 import com.girlify.dolarapp.dolar.ui.model.DollarOperations
@@ -95,7 +96,8 @@ fun TopBar(dateTimeUpdated: String) {
         title = {
             Text(
                 text = "Última actualización: $dateTimeUpdated",
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 20.sp
             )
         },
     )
@@ -104,7 +106,7 @@ fun TopBar(dateTimeUpdated: String) {
 @Composable
 fun Body(modifier: Modifier, dollars: List<DollarModel>, dollarViewModel: DollarViewModel) {
     val operationSelected: DollarOperations by dollarViewModel.operationSelected.observeAsState(
-        Compra
+        Venta
     )
 
     Column(
@@ -138,8 +140,8 @@ fun DollarCard(dollars: List<DollarModel>, operationSelected: DollarOperations) 
             singleLine = true,
             label = { Text(text = "Ingresa el monto a calcular")},
             trailingIcon = { when(operationSelected){
-                Compra -> Text(text = "ARG")
-                Venta -> Text(text = "USD")
+                Compra -> Text(text = "USD")
+                Venta -> Text(text = "ARS")
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -166,7 +168,7 @@ fun OperationSelect(operationSelected: DollarOperations, onSelected: (DollarOper
         TextField(
             value = operationToString(operationSelected),
             onValueChange = { onSelected(operationSelected) },
-            label = { Text(text = "Tipo de operación") },
+            label = { Text(text = "Tipo de cambio") },
             enabled = false,
             readOnly = true,
             shape = ShapeDefaults.Medium,
@@ -231,8 +233,8 @@ fun DollarList(amount: Float, dollars: List<DollarModel>, operationSelected: Dol
 @Composable
 fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: DollarOperations = Compra) {
     val amountText = when (operationSelected) {
-        Compra -> formatDollarAmount(amount, dollar.sell)
-        Venta -> formatPesoAmount(amount, dollar.buy)
+        Compra -> formatPesoAmount(amount, dollar.buy)
+        Venta -> formatDollarAmount(amount, dollar.sell)
     }
     Row(
         modifier = Modifier.fillMaxWidth(),
