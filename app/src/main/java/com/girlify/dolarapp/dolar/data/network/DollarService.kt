@@ -2,6 +2,8 @@ package com.girlify.dolarapp.dolar.data.network
 
 import com.girlify.dolarapp.dolar.data.model.DollarResponse
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -10,64 +12,51 @@ class DollarService @Inject constructor(
 ) {
 
     suspend fun getDollarOficial(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
             val response =
                 apiClient.getDollarOficial()
-            response.body()
-        }
+        return response.body()
     }
 
+
     suspend fun getDollarBcoNacion(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response =
-                apiClient.getDollarBcoNacion()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarBcoNacion()
+        return response.body()
     }
 
     suspend fun getDollarQatar(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response =
-                apiClient.getDollarQatar()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarQatar()
+        return response.body()
     }
 
     suspend fun getDollarTurista(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response =
-                apiClient.getDollarTurista()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarTurista()
+        return response.body()
     }
 
     suspend fun getDollarAhorro(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response =
-                apiClient.getDollarAhorro()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarAhorro()
+        return response.body()
     }
 
     suspend fun getDollarBlue(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response =
-                apiClient.getDollarBlue()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarBlue()
+        return response.body()
     }
 
     suspend fun getDollarMEP(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response = apiClient.getDollarMEP()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarMEP()
+        return response.body()
     }
 
     suspend fun getDollarCCL(): DollarResponse? {
-        return withContext(Dispatchers.IO) {
-            val response = apiClient.getDollarCCL()
-            response.body()
-        }
+        val response =
+            apiClient.getDollarCCL()
+        return response.body()
     }
 }
