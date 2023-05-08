@@ -3,15 +3,15 @@ package com.girlify.dolarapp.dolar.ui.model
 import com.girlify.dolarapp.dolar.ui.model.DollarOperations.*
 
 sealed class DollarOperations {
-    object Compra: DollarOperations()
-    object Venta: DollarOperations()
+    object Buy: DollarOperations()
+    object Sell: DollarOperations()
 }
 
-fun getOperations(): List<DollarOperations> = listOf(Compra, Venta)
+fun getOperations(): List<DollarOperations> = listOf(Buy, Sell)
 
 fun operationToString(operation: DollarOperations): String {
     return when(operation) {
-        Compra -> "Comprador"
-        Venta -> "Vendedor"
+        Buy -> "Comprador"
+        Sell -> "Vendedor"
     }
 }
