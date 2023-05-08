@@ -1,4 +1,4 @@
-package com.girlify.dolarapp.core
+package com.girlify.dolarapp.core.network
 
 import com.girlify.dolarapp.dolar.data.network.DollarApiClient
 import dagger.Module
