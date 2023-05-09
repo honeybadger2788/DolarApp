@@ -35,6 +35,7 @@ class DollarViewModel @Inject constructor(
         viewModelScope.launch {
             getDollarsUseCase().collect{
                 _uiState.value = Success(it)
+                // Hará que el reloj esté actualizado con la última consulta
                 _dateTimeUpdated.value = getDateTime()
             }
         }
