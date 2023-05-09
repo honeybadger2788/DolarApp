@@ -1,5 +1,6 @@
 package com.girlify.dolarapp.dolar.data
 
+import android.util.Log
 import com.girlify.dolarapp.dolar.data.network.DollarService
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
 import kotlinx.coroutines.Dispatchers
@@ -33,6 +34,11 @@ class DollarRepository @Inject constructor(
             async { api.getDollarOficial()?.toDomain("Oficial") },
             async { api.getDollarTurista()?.toDomain("Turista") }
         )
-        deferredDollars.awaitAll().filterNotNull()
+        try {
+            deferredDollars.awaitAll().filterNotNull()
+        } catch (e: Exception) {
+            Log.e("DollarRepository", "Exception in getDollarList: ${e.message}")
+            emptyList()
+        }
     }
 }

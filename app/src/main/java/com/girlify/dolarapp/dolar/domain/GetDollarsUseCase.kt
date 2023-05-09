@@ -9,4 +9,5 @@ class GetDollarsUseCase@Inject constructor(
     private val dollarRepository: DollarRepository
 ) {
     operator fun invoke(): Flow<List<DollarModel>> = dollarRepository.getDollars()
+
 }
