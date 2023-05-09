@@ -37,12 +37,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.girlify.dolarapp.core.VariationNotificacion
+import com.girlify.dolarapp.core.VariationNotification
 import com.girlify.dolarapp.dolar.ui.UiState.*
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
 import com.girlify.dolarapp.dolar.ui.model.DollarOperations
@@ -55,11 +56,18 @@ import java.text.NumberFormat
 import java.util.Currency
 import java.util.Locale
 
+const val TEXT_FIELD_TEST_TAG = "text field test tag"
+const val DOLLARS_LIST_TEST_TAG = "dollars list test tag"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DollarScreen(dollarViewModel: DollarViewModel) {
     val uiState by produceState<UiState>(initialValue = Loading) {
         dollarViewModel.uiState.collect { value = it }
+    }
+
+    LaunchedEffect(Unit){
+        dollarViewModel.getDollars()
     }
 
     val dateTimeUpdated: String by dollarViewModel.dateTimeUpdated.observeAsState("")
@@ -110,7 +118,7 @@ fun TopBar(dateTimeUpdated: String) {
 @Composable
 fun Body(modifier: Modifier, dollars: List<DollarModel>, dollarViewModel: DollarViewModel) {
     val operationSelected: DollarOperations by dollarViewModel.operationSelected.observeAsState(
-        Venta
+        Sell
     )
 
     Column(
@@ -143,8 +151,8 @@ fun DollarCard(dollars: List<DollarModel>, operationSelected: DollarOperations) 
             singleLine = true,
             label = { Text(text = "Ingresa el monto a calcular")},
             trailingIcon = { when(operationSelected){
-                Compra -> Text(text = "USD")
-                Venta -> Text(text = "ARS")
+                Buy -> Text(text = "USD")
+                Sell -> Text(text = "ARS")
                 }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -178,7 +186,7 @@ fun OperationSelect(operationSelected: DollarOperations, onSelected: (DollarOper
             textStyle = TextStyle(Color.Black),
             modifier = Modifier
                 .clickable { expanded = true }
-                .fillMaxWidth(),
+                .fillMaxWidth().testTag(TEXT_FIELD_TEST_TAG),
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
@@ -203,7 +211,8 @@ fun OperationSelect(operationSelected: DollarOperations, onSelected: (DollarOper
                 }, onClick = {
                     expanded = false
                     onSelected(operation)
-                })
+                },
+                Modifier.testTag(operationToString(operation)))
             }
         }
     }
@@ -227,7 +236,8 @@ fun DollarList(amount: Float, dollars: List<DollarModel>, operationSelected: Dol
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(16.dp)
+            .testTag(DOLLARS_LIST_TEST_TAG),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(dollars) {
@@ -237,10 +247,10 @@ fun DollarList(amount: Float, dollars: List<DollarModel>, operationSelected: Dol
 }
 
 @Composable
-fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: DollarOperations = Compra) {
+fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: DollarOperations = Buy) {
     val amountText = when (operationSelected) {
-        Compra -> formatPesoAmount(amount, dollar.buy)
-        Venta -> formatDollarAmount(amount, dollar.sell)
+        Buy -> formatPesoAmount(amount, dollar.buy)
+        Sell -> formatDollarAmount(amount, dollar.sell)
     }
 
     val context = LocalContext.current
@@ -253,13 +263,13 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
         (currentVariation >= 5f || currentVariation <= -5f)) {
         val msg =
             if (currentVariation >= 5f) "Subió un ${dollar.variation}" else "Bajó un ${dollar.variation}"
-        val createNotification = VariationNotificacion(context, dollar.name, msg)
+        val createNotification = VariationNotification(context, dollar.name, msg)
         createNotification.showNotification()
         lastVariation = dollar.variation
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().testTag(dollar.name),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
@@ -298,7 +308,7 @@ fun VariationIcon(classVariation: String) {
     }, contentDescription = "variation")
 }
 
-private fun formatDollarAmount(amount: Float, sellPrice: String): String {
+fun formatDollarAmount(amount: Float, sellPrice: String): String {
     val exchangeRate = sellPrice.replace(",", ".").toFloat()
     val total = if (amount != 0f) amount / exchangeRate else exchangeRate
     val format: NumberFormat = NumberFormat.getCurrencyInstance()
@@ -307,7 +317,7 @@ private fun formatDollarAmount(amount: Float, sellPrice: String): String {
     return format.format(total)
 }
 
-private fun formatPesoAmount(amount: Float, buyPrice: String): String {
+fun formatPesoAmount(amount: Float, buyPrice: String): String {
     val exchangeRate = buyPrice.replace(",", ".").toFloat()
     val total = if (amount != 0f) amount * exchangeRate else exchangeRate
     val format: NumberFormat = NumberFormat.getCurrencyInstance()

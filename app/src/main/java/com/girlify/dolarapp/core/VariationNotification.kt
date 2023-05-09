@@ -10,33 +10,38 @@ import androidx.core.app.NotificationCompat
 import com.girlify.dolarapp.MainActivity
 import com.girlify.dolarapp.R
 
-class VariationNotificacion(
-    var context : Context,
-    var title : String,
-    var msg : String
+class VariationNotification (
+    private val context : Context,
+    private val title : String,
+    private val msg : String,
+    private val notificationId: Int = 1
 ) {
-
     private val channelId = "My_channel"
     private val channelName= "My channel name"
-    private val notificationManager =
-        context.applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    lateinit var notificationChannel: NotificationChannel
-    lateinit var notificationBuilder: NotificationCompat.Builder
+    private val notificationActionOpen = "Open"
 
+    private val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     fun showNotification(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            notificationChannel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
+        val intent = Intent(context, MainActivity::class.java)
+        val pendingIntent =
+            PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+
+        val importance = NotificationManager.IMPORTANCE_HIGH
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(channelId, channelName, importance)
             notificationManager.createNotificationChannel(notificationChannel)
         }
 
-        val intent = Intent(context, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
-        notificationBuilder = NotificationCompat.Builder(context, channelId)
-        notificationBuilder.setSmallIcon(R.drawable.ic_launcher_background)
-        notificationBuilder.addAction(R.drawable.ic_launcher_background, "Open", pendingIntent)
-        notificationBuilder.setContentTitle(title)
-        notificationBuilder.setContentText(msg)
-        notificationBuilder.setAutoCancel(true)
-        notificationManager.notify(100, notificationBuilder.build())
+        val notification = NotificationCompat.Builder(context, channelId)
+            .setContentTitle(title)
+            .setContentText(msg)
+            .setAutoCancel(true)
+            .addAction(R.drawable.ic_launcher_background, notificationActionOpen, pendingIntent)
+            .setSmallIcon(R.drawable.ic_launcher_background)
+            .build()
+
+        notificationManager.notify(notificationId, notification)
     }
 }

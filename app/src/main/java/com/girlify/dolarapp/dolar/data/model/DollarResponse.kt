@@ -16,10 +16,8 @@ data class DollarResponse (
             name,
             this.compra,
             this.venta,
-            this.fecha,
             this.variacion,
             this.class_variacion,
-            this.valor_cierre_ant
         )
     }
 }
