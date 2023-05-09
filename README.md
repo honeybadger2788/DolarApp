@@ -70,6 +70,7 @@ siguientes pasos:
 [(Subir)](#tabla-de-contenidos)
 
 ![Shield](https://img.shields.io/github/actions/workflow/status/honeybadger2788/DolarApp/ci.yml)
+![Shield](https://img.shields.io/github/issues-pr-closed-raw/honeybadger2788/DolarApp)
 
 Se implementó la integración continua (CI) a través de workflows en GitHub Actions. Se crearon dos
 jobs: `build` y `test`.
@@ -88,7 +89,6 @@ Los workflows de CI se encuentran en el archivo `ci.yml` en el repositorio.
 [(Subir)](#tabla-de-contenidos)
 
 ![Shield](https://img.shields.io/github/license/honeybadger2788/DolarApp)
-![Shield](https://img.shields.io/github/issues-pr-closed-raw/honeybadger2788/DolarApp)
 
 Este proyecto está bajo la Licencia MIT - ver el
 archivo [LICENSE](https://github.com/honeybadger2788/DolarApp/blob/dev/LICENSE) para más
