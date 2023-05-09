@@ -2,9 +2,6 @@
 
 # DOLAR APP 🚀
 
-![Shield](https://img.shields.io/github/issues-pr-closed-raw/honeybadger2788/DolarApp)
-![Shield](https://img.shields.io/github/license/honeybadger2788/DolarApp)
-
 Proyecto de una aplicación de cotización en tiempo real y conversión de moneda para Argentina.
 
 ## Descripción
@@ -90,8 +87,11 @@ Los workflows de CI se encuentran en el archivo `ci.yml` en el repositorio.
 
 [(Subir)](#tabla-de-contenidos)
 
+![Shield](https://img.shields.io/github/license/honeybadger2788/DolarApp)
+![Shield](https://img.shields.io/github/issues-pr-closed-raw/honeybadger2788/DolarApp)
+
 Este proyecto está bajo la Licencia MIT - ver el
-archivo [LICENSE](https://github.com/tu-usuario/nombre-del-repositorio/blob/main/LICENSE) para más
+archivo [LICENSE](https://github.com/honeybadger2788/DolarApp/blob/dev/LICENSE) para más
 detalles.
 
 # Footer
