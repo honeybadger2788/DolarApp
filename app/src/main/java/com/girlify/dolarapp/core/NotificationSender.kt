@@ -10,7 +10,7 @@ import androidx.core.app.NotificationCompat
 import com.girlify.dolarapp.MainActivity
 import com.girlify.dolarapp.R
 
-class VariationNotification (
+class NotificationSender (
     private val context : Context,
     private val title : String,
     private val msg : String,
@@ -38,8 +38,8 @@ class VariationNotification (
             .setContentTitle(title)
             .setContentText(msg)
             .setAutoCancel(true)
-            .addAction(R.drawable.ic_launcher_background, notificationActionOpen, pendingIntent)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .addAction(R.mipmap.ic_launcher_foreground, notificationActionOpen, pendingIntent)
+            .setSmallIcon(R.mipmap.ic_launcher_foreground)
             .build()
 
         notificationManager.notify(notificationId, notification)

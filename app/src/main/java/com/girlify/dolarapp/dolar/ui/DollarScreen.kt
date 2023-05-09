@@ -1,5 +1,6 @@
 package com.girlify.dolarapp.dolar.ui
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,7 +44,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.girlify.dolarapp.core.VariationNotification
+import com.girlify.dolarapp.core.NotificationSender
 import com.girlify.dolarapp.dolar.ui.UiState.*
 import com.girlify.dolarapp.dolar.ui.model.DollarModel
 import com.girlify.dolarapp.dolar.ui.model.DollarOperations
@@ -97,7 +98,8 @@ fun Footer() {
         text = "Fuente: Ámbito Financiero",
         Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
+        fontSize = 12.sp
     )
 }
 
@@ -186,7 +188,8 @@ fun OperationSelect(operationSelected: DollarOperations, onSelected: (DollarOper
             textStyle = TextStyle(Color.Black),
             modifier = Modifier
                 .clickable { expanded = true }
-                .fillMaxWidth().testTag(TEXT_FIELD_TEST_TAG),
+                .fillMaxWidth()
+                .testTag(TEXT_FIELD_TEST_TAG),
             trailingIcon = {
                 Icon(
                     imageVector = Icons.Default.KeyboardArrowDown,
@@ -255,21 +258,15 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
 
     val context = LocalContext.current
     var lastVariation by rememberSaveable { mutableStateOf(dollar.variation) }
-    val currentVariation = formatVariation(dollar.variation)
 
     // La aplicación enviará una notificación cada vez que el tipo de cambio sufra una variacion
     // de +/- 5%, por única vez mientras dicho porcentaje se mantenga
-    if (currentVariation != formatVariation(lastVariation) &&
-        (currentVariation >= 5f || currentVariation <= -5f)) {
-        val msg =
-            if (currentVariation >= 5f) "Subió un ${dollar.variation}" else "Bajó un ${dollar.variation}"
-        val createNotification = VariationNotification(context, dollar.name, msg)
-        createNotification.showNotification()
-        lastVariation = dollar.variation
-    }
+    lastVariation = sendDollarNotification(context, dollar, lastVariation)
 
     Row(
-        modifier = Modifier.fillMaxWidth().testTag(dollar.name),
+        modifier = Modifier
+            .fillMaxWidth()
+            .testTag(dollar.name),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row {
@@ -294,6 +291,19 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
     }
 }
 
+fun sendDollarNotification(context: Context, dollar: DollarModel, lastVariation: String): String {
+    return if (formatVariation(dollar.variation) != formatVariation(lastVariation) &&
+        (formatVariation(dollar.variation) >= 5f || formatVariation(dollar.variation) <= -5f)) {
+        val msg =
+            if (formatVariation(dollar.variation) >= 5f) "Subió un ${dollar.variation}" else "Bajó un ${dollar.variation}"
+        val createNotification = NotificationSender(context, dollar.name, msg)
+        createNotification.showNotification()
+        dollar.variation
+    } else {
+        lastVariation
+    }
+}
+
 fun formatVariation(variation: String): Float {
     return variation.replace(",", ".").replace("%", "").toFloat()
 }
@@ -310,10 +320,16 @@ fun VariationIcon(classVariation: String) {
 
 fun formatDollarAmount(amount: Float, sellPrice: String): String {
     val exchangeRate = sellPrice.replace(",", ".").toFloat()
-    val total = if (amount != 0f) amount / exchangeRate else exchangeRate
     val format: NumberFormat = NumberFormat.getCurrencyInstance()
     format.maximumFractionDigits = 2
-    format.currency = Currency.getInstance(Locale("en", "US"))
+    val total = if (amount != 0f) {
+        format.currency = Currency.getInstance(Locale("en", "US"))
+        amount / exchangeRate
+    } else {
+        // Para que muestre la cotización en pesos hasta que se ingrese algo en el input
+        format.currency = Currency.getInstance(Locale("es", "AR"))
+        exchangeRate
+    }
     return format.format(total)
 }
 
