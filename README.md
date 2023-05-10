@@ -21,7 +21,7 @@ información en la UI.
 Por último, la aplicación cuenta con un envío de notificación al usuario, si alguna de las
 cotizaciones sufre una variación de +/-5%.
 
-# Demo
+## Demo
 
 <p align="center">
 <img align="center" width="300" alt="portfolio_view" src="./docs/Screenshot_20230509_200144.png">
@@ -43,7 +43,7 @@ cotizaciones sufre una variación de +/-5%.
 - Corutinas
 - JUnit y Mock para testeo de unidades y de UI
 
-# Tabla de contenidos
+## Tabla de contenidos
 
 - [Descripción](#descripción)
 - [Demo](#demo)
@@ -94,7 +94,7 @@ Este proyecto está bajo la Licencia MIT - ver el
 archivo [LICENSE](https://github.com/honeybadger2788/DolarApp/blob/dev/LICENSE) para más
 detalles.
 
-# Footer
+## Footer
 
 [(Subir)](#tabla-de-contenidos)
 
@@ -103,4 +103,4 @@ conmigo, puedes hacerlo por cualquiera de estos medios:
 
 - [CV online](https://myporfolio.notion.site/Noelia-Carosella-c0c2f1dbfc8d403e8660356546e90f75)
 - [LinkedIn](https://www.linkedin.com/in/noeliabcarosella/)
-- [Mail](noe.carosella@gmail.com)
+- [Mail](mailto:noe.carosella@gmail.com)
