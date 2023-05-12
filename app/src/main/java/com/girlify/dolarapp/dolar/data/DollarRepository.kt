@@ -2,7 +2,7 @@ package com.girlify.dolarapp.dolar.data
 
 import android.util.Log
 import com.girlify.dolarapp.dolar.data.network.DollarService
-import com.girlify.dolarapp.dolar.ui.model.DollarModel
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll

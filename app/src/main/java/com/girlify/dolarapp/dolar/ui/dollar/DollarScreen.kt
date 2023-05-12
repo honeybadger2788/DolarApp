@@ -1,4 +1,4 @@
-package com.girlify.dolarapp.dolar.ui
+package com.girlify.dolarapp.dolar.ui.dollar
 
 import android.content.Context
 import androidx.compose.foundation.background
@@ -45,12 +45,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.girlify.dolarapp.core.NotificationSender
-import com.girlify.dolarapp.dolar.ui.UiState.*
-import com.girlify.dolarapp.dolar.ui.model.DollarModel
-import com.girlify.dolarapp.dolar.ui.model.DollarOperations
-import com.girlify.dolarapp.dolar.ui.model.DollarOperations.*
-import com.girlify.dolarapp.dolar.ui.model.getOperations
-import com.girlify.dolarapp.dolar.ui.model.operationToString
+import com.girlify.dolarapp.dolar.ui.dollar.UiState.*
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarModel
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarOperations
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarOperations.*
+import com.girlify.dolarapp.dolar.ui.dollar.model.getOperations
+import com.girlify.dolarapp.dolar.ui.dollar.model.operationToString
 import com.girlify.dolarapp.ui.composables.ErrorComponent
 import com.girlify.dolarapp.ui.composables.LoadingComponent
 import java.text.NumberFormat
