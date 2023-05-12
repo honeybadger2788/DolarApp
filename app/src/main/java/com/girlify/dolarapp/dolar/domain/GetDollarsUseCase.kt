@@ -1,7 +1,7 @@
 package com.girlify.dolarapp.dolar.domain
 
 import com.girlify.dolarapp.dolar.data.DollarRepository
-import com.girlify.dolarapp.dolar.ui.model.DollarModel
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

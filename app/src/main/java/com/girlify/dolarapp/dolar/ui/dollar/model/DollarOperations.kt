@@ -1,6 +1,6 @@
-package com.girlify.dolarapp.dolar.ui.model
+package com.girlify.dolarapp.dolar.ui.dollar.model
 
-import com.girlify.dolarapp.dolar.ui.model.DollarOperations.*
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarOperations.*
 
 sealed class DollarOperations {
     object Buy: DollarOperations()

@@ -1,6 +1,6 @@
 package com.girlify.dolarapp.dolar.data.model
 
-import com.girlify.dolarapp.dolar.ui.model.DollarModel
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarModel
 import com.google.gson.annotations.SerializedName
 
 data class DollarResponse (

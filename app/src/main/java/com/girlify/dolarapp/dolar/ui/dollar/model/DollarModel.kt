@@ -1,4 +1,4 @@
-package com.girlify.dolarapp.dolar.ui.model
+package com.girlify.dolarapp.dolar.ui.dollar.model
 
 class DollarModel (
     val name: String,

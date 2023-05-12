@@ -1,12 +1,12 @@
-package com.girlify.dolarapp.dolar.ui
+package com.girlify.dolarapp.dolar.ui.dollar
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.girlify.dolarapp.dolar.domain.GetDollarsUseCase
-import com.girlify.dolarapp.dolar.ui.UiState.Success
-import com.girlify.dolarapp.dolar.ui.model.DollarOperations
+import com.girlify.dolarapp.dolar.ui.dollar.UiState.Success
+import com.girlify.dolarapp.dolar.ui.dollar.model.DollarOperations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
