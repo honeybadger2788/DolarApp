@@ -1,7 +1,6 @@
 package com.girlify.dolarapp.dolar.ui.dollar
 
 import android.content.Context
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -73,6 +72,7 @@ fun DollarScreen(dollarViewModel: DollarViewModel) {
 
     val dateTimeUpdated: String by dollarViewModel.dateTimeUpdated.observeAsState("")
     Scaffold(
+        Modifier.padding(16.dp),
         topBar = {
             TopBar(dateTimeUpdated)
         },
@@ -117,6 +117,7 @@ fun TopBar(dateTimeUpdated: String) {
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Body(modifier: Modifier, dollars: List<DollarModel>, dollarViewModel: DollarViewModel) {
     val operationSelected: DollarOperations by dollarViewModel.operationSelected.observeAsState(
@@ -125,22 +126,9 @@ fun Body(modifier: Modifier, dollars: List<DollarModel>, dollarViewModel: Dollar
 
     Column(
         modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.primary), verticalArrangement = Arrangement.Center
+            .fillMaxSize(), verticalArrangement = Arrangement.Center
     ) {
         OperationSelect(operationSelected) { dollarViewModel.onSelected(it) }
-        DollarCard(dollars, operationSelected)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DollarCard(dollars: List<DollarModel>, operationSelected: DollarOperations) {
-    Card(
-        Modifier
-            .padding(16.dp),
-        elevation = CardDefaults.cardElevation(8.dp)
-    ) {
         var amount by rememberSaveable {
             mutableStateOf("")
         }
@@ -155,17 +143,17 @@ fun DollarCard(dollars: List<DollarModel>, operationSelected: DollarOperations) 
             trailingIcon = { when(operationSelected){
                 Buy -> Text(text = "USD")
                 Sell -> Text(text = "ARS")
-                }
+            }
             },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp)
         )
         DollarList(
             (if (amount.isEmpty()){
                 0f
             } else {
                 amount.toFloat()
-            }), dollars, operationSelected
+            }), dollars, operationSelected, Modifier.fillMaxWidth().padding(8.dp)
         )
     }
 }
@@ -177,7 +165,7 @@ fun OperationSelect(operationSelected: DollarOperations, onSelected: (DollarOper
         mutableStateOf(false)
     }
 
-    Column(Modifier.padding(16.dp)) {
+    Column {
         TextField(
             value = operationToString(operationSelected),
             onValueChange = { onSelected(operationSelected) },
@@ -235,11 +223,14 @@ fun inputFormatter(total: String): String {
 }
 
 @Composable
-fun DollarList(amount: Float, dollars: List<DollarModel>, operationSelected: DollarOperations) {
+fun DollarList(
+    amount: Float,
+    dollars: List<DollarModel>,
+    operationSelected: DollarOperations,
+    modifier: Modifier
+) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+        modifier = modifier
             .testTag(DOLLARS_LIST_TEST_TAG),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -263,31 +254,35 @@ fun DollarItem(dollar: DollarModel, amount: Float = 0f, operationSelected: Dolla
     // de +/- 5%, por única vez mientras dicho porcentaje se mantenga
     lastVariation = sendDollarNotification(context, dollar, lastVariation)
 
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag(dollar.name),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Row {
+    Card(modifier = Modifier
+        .fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(8.dp)) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(dollar.name).padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row {
+                Text(
+                    text = dollar.name,
+                    color = MaterialTheme.colorScheme.tertiary,
+                    fontWeight = FontWeight.Bold
+                )
+                Spacer(modifier = Modifier.size(4.dp))
+                VariationIcon(dollar.class_variation)
+                Spacer(modifier = Modifier.size(4.dp))
+                Text(
+                    text = dollar.variation,
+                    color = MaterialTheme.colorScheme.tertiary
+                )
+            }
             Text(
-                text = dollar.name,
+                text = amountText,
                 color = MaterialTheme.colorScheme.tertiary,
                 fontWeight = FontWeight.Bold
             )
-            Spacer(modifier = Modifier.size(4.dp))
-            VariationIcon(dollar.class_variation)
-            Spacer(modifier = Modifier.size(4.dp))
-            Text(
-                text = dollar.variation,
-                color = MaterialTheme.colorScheme.tertiary
-            )
         }
-        Text(
-            text = amountText,
-            color = MaterialTheme.colorScheme.tertiary,
-            fontWeight = FontWeight.Bold
-        )
     }
 }
 

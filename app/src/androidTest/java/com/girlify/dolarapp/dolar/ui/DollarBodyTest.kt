@@ -31,7 +31,7 @@ internal class DollarBodyTest {
     @Test
     fun whenComponentStarts_thenVerifyListIsEmpty() {
         composeTestRule.setContent {
-            DollarCard(emptyList(), Buy)
+            DollarCard(emptyList(), Buy, amount)
         }
 
         composeTestRule.onNodeWithTag(DOLLARS_LIST_TEST_TAG)
@@ -42,7 +42,7 @@ internal class DollarBodyTest {
     @Test
     fun whenComponentStarts_thenVerifyDollarsListIsDisplayed() {
         composeTestRule.setContent {
-            DollarCard(getDollars(), Buy)
+            DollarCard(getDollars(), Buy, amount)
         }
 
         // Comprobar que se muestra una tarjeta por cada elemento en la lista de dólares
@@ -90,7 +90,7 @@ internal class DollarBodyTest {
         }
 
         composeTestRule.setContent {
-            DollarCard(getDollars(), Buy)
+            DollarCard(getDollars(), Buy, amount)
         }
 
         // Comprobar que se muestra una tarjeta por cada elemento en la lista de dólares
